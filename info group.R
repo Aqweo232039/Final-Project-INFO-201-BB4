@@ -8,7 +8,8 @@ df10 <- read.csv("TRAVEL_TIME_TO_WORK_(B08303).csv")
 Per_capita_income_df<-df4
 Influencing_factor_df<-df10
 Per_capita_income_and_influencing_factors<-Per_capita_income_df %>%
-  full_join(Influencing_factor_df,by =c( "GEOID","NAME","ACS_VINTAGE"))
+ # full_join(Influencing_factor_df,by =c( "GEOID","NAME","ACS_VINTAGE"))
+full_join(Influencing_factor_df,by =c( "GEOID","NAME","ACS_VINTAGE","JURISDICTION", "CRA_NO", "CRA_GRP", "GEN_ALIAS","DETL_NAMES", "TRACT_LABEL"))
 #ACS_VINTAGE is year   GEOID IS city code
 Trends_in_the_economy <- function(name, last_year) {
   df_last_year <- filter(Per_capita_income_and_influencing_factors, GEOID == name, ACS_VINTAGE == last_year)
@@ -31,7 +32,7 @@ Per_capita_income_and_influencing_factors <- Per_capita_income_and_influencing_f
   
   
   
-  
+  write.csv(Per_capita_income_and_influencing_factors, file = "Per_capita_income_and_influencing_factors.csv", row.names = FALSE)
   
   
   
