@@ -11,7 +11,7 @@ df10 <- read.csv("TRAVEL_TIME_TO_WORK_(B08303).csv")
 Per_capita_income_df<-df4
 Influencing_factor_df<-df10
 Per_capita_income_and_influencing_factors<-Per_capita_income_df %>%
-full_join(Influencing_factor_df,by =c( "GEOID","NAME","ACS_VINTAGE","JURISDICTION", "CRA_NO", "CRA_GRP", "GEN_ALIAS","DETL_NAMES", "TRACT_LABEL"))
+  full_join(Influencing_factor_df,by =c( "GEOID","NAME","ACS_VINTAGE","JURISDICTION", "CRA_NO", "CRA_GRP", "GEN_ALIAS","DETL_NAMES", "TRACT_LABEL"))
 
 Trends_in_the_economy <- function(name, last_year) {
   df_last_year <- filter(Per_capita_income_and_influencing_factors, GEOID == name, ACS_VINTAGE == last_year)
@@ -30,9 +30,9 @@ Per_capita_income_and_influencing_factors <- Per_capita_income_and_influencing_f
     Economic_growth = !is.na(Trends_in_the_economy) && Trends_in_the_economy > 0
   ) %>%
   ungroup()
-  
+
 Per_capita_income_and_influencing_factors<- df <- select(Per_capita_income_and_influencing_factors,-OBJECTID.y)
-  
+
 Per_capita_income_and_influencing_factors <- Per_capita_income_and_influencing_factors %>%
   mutate(
     The_average_commute_time = ((B08303_002E * 2.5) + (B08303_003E * 7) + (B08303_004E * 12) + 
@@ -48,7 +48,7 @@ Per_capita_income_and_influencing_factors <- Per_capita_income_and_influencing_f
       first(The_average_commute_time[ACS_VINTAGE == "5Y10"])
   ) %>%
   ungroup()
-  
+
 Per_capita_income_and_influencing_factors <- Per_capita_income_and_influencing_factors %>%
   mutate(
     Changes_in_average_commute_time_Trends_in_commute_time = Changes_in_the_average_commute_time > 0
@@ -79,16 +79,16 @@ ui <- fluidPage(
 )
 server <- function(input, output) {
   
-output$commutePlot <- renderPlot({
-
+  output$commutePlot <- renderPlot({
+    
     selected_data <- filter(df_Plus, GEOID == input$geoID, ACS_VINTAGE == input$vintage)
-
+    
     selected_data_long <- pivot_longer(selected_data, 
                                        cols = starts_with("B08303_"), 
                                        names_to = "Commute_Category", 
                                        values_to = "Count")
     commute_labels <- c(B08303_001E = "Total popular",
-      B08303_002E = "Less than 5 minutes commute",
+                        B08303_002E = "Less than 5 minutes commute",
                         B08303_003E = "5 to 9 minutes commute",
                         B08303_004E = "10 to 14 minutes commute",
                         B08303_005E = "15 to 19 minutes commute",
@@ -102,40 +102,36 @@ output$commutePlot <- renderPlot({
                         B08303_013E = "90 or more minutes commute")
     
     selected_data_long$Commute_Category <- recode(selected_data_long$Commute_Category, !!!commute_labels)
-
+    
     ggplot(selected_data_long, aes(x = Commute_Category, y = Count)) +
       geom_bar(stat = "identity") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
       labs(x = "Commute Time", y = "Number of People", title = "Commute Time Distribution")
-})
+  })
   output$commuteTable <- renderDT({
-
     selected_data <- filter(df_Plus, GEOID == input$geoID, ACS_VINTAGE == input$vintage)
-    datatable(selected_data)
+    datatable(selected_data, 
+              options = list(
+                paging = TRUE, 
+                lengthMenu = c(5,10,15) 
+              )
+    )
   })
   output$impactChart <- renderPlot({
-
+    
     selected_year_data <- filter(df_Plus, ACS_VINTAGE == input$year)
-
+    
     ggplot(selected_year_data, aes(x = "", fill = interaction(Economic_growth, Changes_in_average_commute_time_Trends_in_commute_time))) +
       geom_bar(width = 1) +
       coord_polar(theta = "y") +
       theme_void()
   })
-
+  
   output$wagePlot <- renderPlot({
-
     selected_geo_data <- filter(df_Plus, GEOID == input$geoIDWage)
-
-    selected_data_long <- pivot_longer(selected_geo_data, 
-                                       cols = B19301_001E, 
-                                       names_to = "Year", 
-                                       values_to = "PerCapitaIncome")
-
-    ggplot(selected_data_long, aes(x = ACS_VINTAGE, y = PerCapitaIncome)) + 
-      geom_bar(stat = "identity") +
-      labs(x = "Year", y = "Per Capita Income (Inflation-Adjusted)") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+    ggplot(selected_geo_data, aes(x = ACS_VINTAGE, y = B19301_001E, group = GEOID)) +
+      geom_line() + geom_point() +
+      labs(x = "Year", y = "Average Wage", title = "Average Wage Change Over Years")
   })
 }
 
