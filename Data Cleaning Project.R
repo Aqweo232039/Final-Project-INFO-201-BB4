@@ -65,7 +65,10 @@ ui <- fluidPage(
                       selectInput("geoID", "Select Geography ID:", choices = df_name$GEOID),
                       selectInput("vintage", "Select Year:", choices = c("5Y15", "5Y20", "5Y21")),
                       plotOutput("commutePlot"),
-                      DTOutput("commuteTable")
+                      DTOutput("commuteTable"),
+                      # DTOutput("locationsTable"),
+                      # DTOutput("populationCommuteTable"),
+                      # DTOutput("changeTable")
              ),
              tabPanel("Impact Chart",
                       selectInput("year", "Select Year for Impact Chart:", choices = c("5Y15", "5Y20", "5Y21")),
@@ -77,6 +80,40 @@ ui <- fluidPage(
              )
   )
 )
+
+column_names_map <- c(
+  GEOID = "Geography ID Number",
+  NAME = "Tract Name",
+  B01001_001E = "Total Population",
+  B19313_001E = "Aggregate income in the past 12 months (in inflation-adjusted dollars)",
+  B19301_001E = "Per capita income in the past 12 months (in inflation-adjusted dollars)",
+  CRA_NO = "Community Reporting Area ID",
+  CRA_GRP = "Community Reporting Area Group",
+  GEN_ALIAS = "Community Reporting Area Name",
+  DETL_NAMES = "Community Reporting Area Neighborhoods",
+  B08303_001E = "Workers 16 years and over who did not work from home",
+  B08303_002E = "Less than 5 minutes commute",
+  B08303_003E = "5 to 9 minutes commute",
+  B08303_004E = "10 to 14 minutes commute",
+  B08303_005E = "15 to 19 minutes commute",
+  B08303_006E = "20 to 24 minutes commute",
+  B08303_007E = "25 to 29 minutes commute",
+  B08303_008E = "30 to 34 minutes commute",
+  B08303_009E = "35 to 39 minutes commute",
+  B08303_010E = "40 to 44 minutes commute",
+  B08303_011E = "45 to 59 minutes commute",
+  B08303_012E = "60 to 89 minutes commute",
+  B08303_013E = "90 or more minutes commute",
+  Trends_in_the_economy = "Change in per capita income",
+  Economic_growth = "Is economic growth true or false",
+  TRACT_LABEL = "Tract label",
+  JURISDICTION = "Jurisdiction",
+  ACS_VINTAGE = "Year",
+  The_average_commute_time = "The average commute time (minutes)",
+  Changes_in_the_average_commute_time = "Changes in the average commute time (minutes)",
+  Changes_in_average_commute_time_Trends_in_commute_time = "Is commute time increase?"
+)
+
 server <- function(input, output) {
   
   output$commutePlot <- renderPlot({
@@ -110,13 +147,19 @@ server <- function(input, output) {
   })
   output$commuteTable <- renderDT({
     selected_data <- filter(df_Plus, GEOID == input$geoID, ACS_VINTAGE == input$vintage)
+    selected_data <- selected_data %>% select(-OBJECTID.x)
+    colnames(selected_data) <- column_names_map[colnames(selected_data)]
     datatable(selected_data, 
               options = list(
                 paging = TRUE, 
-                lengthMenu = c(5,10,15) 
+                lengthMenu = FALSE,
+                searching = FALSE
               )
     )
   })
+
+  
+  
   output$impactChart <- renderPlot({
     
     selected_year_data <- filter(df_Plus, ACS_VINTAGE == input$year)
