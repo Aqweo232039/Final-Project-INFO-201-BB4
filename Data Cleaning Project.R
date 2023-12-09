@@ -67,7 +67,10 @@ ui <- fluidPage(
                                 selectInput ("geoID", "Select Geography ID:", choices = df_name$GEOID),
                                 textOutput("selectedTractName"),
                                 textOutput("selectedAreaName"),
-                                selectInput("vintage","Select Year:", choices = c('2015'='5Y15','2020'='5Y20','2021'='5Y21'))
+                                selectInput("vintage","Select Year:", choices = c('2015'='5Y15','2020'='5Y20','2021'='5Y21')),
+                                helpText ("In this section, you can select a specific Geography ID. Below the ID, you will see the Tract Name and the actual location of this ID. Then, you can choose a Year to view data. 
+                                          The data displayed on the right indicates the population distribution of commute times 
+                                          for the selected location in the chosen year, along with the number of people in each sample category.")
                                 ),
                         column(6,
           
@@ -89,6 +92,10 @@ ui <- fluidPage(
                                 selectInput("geoIDWage", "Select Geography ID:", choices = df_name$GEOID),
                         # textOutput("selectedTractName"),
                         # textOutput("selectedAreaName")
+                                helpText ("In this section, you can select a specific Geography ID to observe changes in the per capita annual income levels in that area from 2010 to 2015, then to 2020 and 2021. 
+                                          Please note that our data is sourced from the American Community Survey (ACS), and the ACS reports are only available for the years 2010, 2015, 2020, and 2021. 
+                                          Therefore, the data we provide is not continuous over the years. Please not that for some areas, data from 2015 to 2021 is not avaliable due to missing information
+                                          in the ACS (American Community Survey)")
                         ),
                         column(6,
                                # selectInput("vintageWage","Select Year:",
@@ -99,6 +106,10 @@ ui <- fluidPage(
              ),
              tabPanel("Impact Chart",
                       selectInput("year", "Select Year for Impact Chart:", choices = c('2015'='5Y15', '2020'='5Y20', '2021'='5Y21')),
+                      helpText("In this section, you will select three years: 2015, 2020, and 2021. 
+                               These years will be compared with the data from 2010, and the comparison will be displayed in the pie chart on the right. 
+                               In the pie chart, the first True or False value indicates whether there has been economic growth in your selected year compared to 2010. 
+                               The second True or False value shows whether the average commute time has increased in your selected year compared to 2010."),
                       plotOutput("impactChart"),
              )
   )
