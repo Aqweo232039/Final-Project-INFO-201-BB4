@@ -207,4 +207,4 @@ server <- function(input, output) {
 
 shinyApp(ui, server)
 
-rsconnect::deployApp("C:/Users/Lenovo/Desktop/UW/LIGHT course/CSE141/Final-Project-INFO-201-AG")
+rsconnect::deployApp(appDir = "C:/Users/Lenovo/Desktop/UW/LIGHT course/CSE141/Final-Project-INFO-201-BB4")
