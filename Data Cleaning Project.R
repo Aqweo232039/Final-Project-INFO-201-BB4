@@ -66,9 +66,13 @@ ui <- fluidPage(
 
 Commuting time is more than just minutes on the clock, it's a key element in the decisions individuals make about where to live and work. As cities expand and job markets become more competitive, understanding how the daily journey affects one's economic trajectory is essential.
 
-This exploration aims to illustrate on the connection between commuting time and personal economic growth. We'll delve into the ways in Seattle  in which the time spent in transit impacts career development.")
-           ),
-             
+This exploration aims to illustrate on the connection between commuting time and personal economic growth. We'll delve into the ways in Seattle  in which the time spent in transit impacts personal economic development."),
+                    helpText("Therefore, we utilized data from the ", HTML ("<a href ='https://catalog.data.gov/dataset/travel-time-to-work-b08303'> American Community Survey (ACS)</a>"), "for the years 2010, 2015, 2020, and 2021, aggregating survey reports based on Geography IDs for investigation."),
+                    helpText("Additionally, we acquired data from the ", HTML("<a href = 'https://catalog.data.gov/dataset/per-capita-income-and-aggregate-income-in-the-past-12-months-in-inflation-adjusted-dollars'> Per Capita Income and Aggregate Income in the Past 12 Months in Inflation-Adjusted Dollars </a>"),"."),
+                    
+                    helpText(" They include data on total income per person and commuting times to work for each 
+area in Seattle and surrounding areas.")
+                    ),
              
              tabPanel("Commute Time",
                       fluidRow(
@@ -120,17 +124,16 @@ This exploration aims to illustrate on the connection between commuting time and
                                In the pie chart, the first True or False value indicates whether there has been economic growth in your selected year compared to 2010. 
                                The second True or False value shows whether the average commute time has increased in your selected year compared to 2010."),
                       plotOutput("impactChart"),
-             )
-  )
-)
-tabPanel("Conclusion",
-         helpText("According to the first figure, it can be seen that in 2015,2020 and 2021, the largest proportion of attendance time is 20-24 minutes and 30-34 minutes. 
+             ),
+           tabPanel("Conclusion",
+                    helpText("According to the first figure, it can be seen that in 2015,2020 and 2021, the largest proportion of attendance time is 20-24 minutes and 30-34 minutes. 
                   There are also many people's attendance time is 45-59 minutes. Which means most of people are not live closed to their workplace.
                   The increase of commuting time and personal economic growth have little impact. Even though we can see in the chart that most of the people in the chart have high personal economic growth as their commute time goes up. 
                   But we can't lose sight of the fact that the average wage also goes up from year to year. So travel time is not a major consideration for economic growth."),
-         ),
-    )
- ), 
+           )
+        )
+)
+
 
 # 
 # column_names_map <- c(
