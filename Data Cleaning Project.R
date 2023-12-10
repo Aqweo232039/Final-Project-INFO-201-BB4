@@ -61,6 +61,15 @@ ui <- fluidPage(
   titlePanel("Data Analysis Dashboard"),
   
   navbarPage("Navigation",
+             tabPanel("Introduction",
+                    helpText("In the hustle and bustle of today's fast-paced world, the time individuals spend commuting to work is a critical factor influencing their personal economic growth. This relationship between daily travel and financial well-being is an important aspect of modern life and prosperity.
+
+Commuting time is more than just minutes on the clock, it's a key element in the decisions individuals make about where to live and work. As cities expand and job markets become more competitive, understanding how the daily journey affects one's economic trajectory is essential.
+
+This exploration aims to illustrate on the connection between commuting time and personal economic growth. We'll delve into the ways in Seattle  in which the time spent in transit impacts career development.")
+           ),
+             
+             
              tabPanel("Commute Time",
                       fluidRow(
                         column (4,
@@ -114,6 +123,15 @@ ui <- fluidPage(
              )
   )
 )
+tabPanel("Conclusion",
+         helpText("According to the first figure, it can be seen that in 2015,2020 and 2021, the largest proportion of attendance time is 20-24 minutes and 30-34 minutes. 
+                  There are also many people's attendance time is 45-59 minutes. Which means most of people are not live closed to their workplace.
+                  The increase of commuting time and personal economic growth have little impact. Even though we can see in the chart that most of the people in the chart have high personal economic growth as their commute time goes up. 
+                  But we can't lose sight of the fact that the average wage also goes up from year to year. So travel time is not a major consideration for economic growth."),
+         ),
+    )
+ ), 
+
 # 
 # column_names_map <- c(
 #   GEOID = "Geography ID Number",
