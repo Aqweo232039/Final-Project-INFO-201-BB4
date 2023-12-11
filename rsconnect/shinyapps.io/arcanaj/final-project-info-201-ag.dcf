@@ -5,6 +5,6 @@ account: arcanaj
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10767682
-bundleId: 8032471
+bundleId: 8032596
 url: https://arcanaj.shinyapps.io/final-project-info-201-ag/
 version: 1
